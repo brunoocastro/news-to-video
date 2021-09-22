@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/brunoocastro/news-to-video/issues"
   },
-  "homepage": "https://github.com/brunoocastro/news-to-video#readme"
+  "homepage": "https://github.com/brunoocastro/news-to-video#readme",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
 }
