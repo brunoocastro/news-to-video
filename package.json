@@ -4,7 +4,7 @@
   "description": "Transformando noticias em video da forma mais automática possível",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev index.ts --respawn --transpileOnly "
+    "dev": "ts-node-dev src/index.ts --respawn --transpileOnly "
   },
   "repository": {
     "type": "git",
