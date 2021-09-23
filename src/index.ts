@@ -1,15 +1,22 @@
+import mailRobot from "./robots/mail";
+import { startOAuthAuthentication } from "./robots/auth";
+require("dotenv").config();
+
+const robots = {
+  auth: startOAuthAuthentication,
+  mail: mailRobot,
+};
+
 interface content {
-  emailBody?: any
+  emailBody?: any;
 }
 
-function start() {
-  const content: content = {}
+async function start() {
+  const content: content = {};
 
-  content.emailBody = getEmailBody()
+  await robots.auth();
 
-  function getEmailBody () {
-    console.log("Pegando o body do email")
-  }
+  await robots.mail();
 }
 
-start()
+start();
