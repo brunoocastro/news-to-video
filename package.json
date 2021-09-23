@@ -4,7 +4,7 @@
   "description": "Transformando noticias em video da forma mais automática possível",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "ts-node-dev index.ts --respawn --transpileOnly "
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/brunoocastro/news-to-video#readme",
   "devDependencies": {
+    "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
   }
 }
