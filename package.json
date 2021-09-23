@@ -1,0 +1,23 @@
+{
+  "name": "news-to-video",
+  "version": "1.0.0",
+  "description": "Transformando noticias em video da forma mais automática possível",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev index.ts --respawn --transpileOnly "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunoocastro/news-to-video.git"
+  },
+  "author": "Tonelive",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunoocastro/news-to-video/issues"
+  },
+  "homepage": "https://github.com/brunoocastro/news-to-video#readme",
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.3"
+  }
+}
