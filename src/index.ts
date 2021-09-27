@@ -12,11 +12,16 @@ interface content {
 }
 
 async function start() {
-  const content: content = {};
+  const content: any = {
+    news: [],
+    advertising: [],
+  };
 
   await robots.auth();
 
-  await robots.mail();
+  await robots.mail(content);
+
+  console.log("Content: \n", content);
 }
 
 start();
