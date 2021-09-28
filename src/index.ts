@@ -13,6 +13,7 @@ interface content {
 
 async function start() {
   const content: any = {
+    source: {},
     news: [],
     advertising: [],
   };
