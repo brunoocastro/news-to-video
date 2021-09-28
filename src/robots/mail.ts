@@ -91,7 +91,6 @@ async function mailRobot() {
 
   async function fetchEmailContent(id: string, content: any) {
     try {
-      console.log(content.source);
       if(!content.source) content.source = {}
       content.source.id = id;
       const fullEmail = await getMailById(id);
