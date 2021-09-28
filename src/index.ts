@@ -12,17 +12,9 @@ interface content {
 }
 
 async function start() {
-  const content: any = {
-    source: {},
-    news: [],
-    advertising: [],
-  };
-
+  console.log("> [orchestrator] Initializing project")
   await robots.auth();
-
-  await robots.mail(content);
-
-  console.log("Content: \n", content);
+  await robots.mail();
 }
 
 start();

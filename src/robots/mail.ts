@@ -1,11 +1,17 @@
 import base64url from "base64-url";
-import fs from "fs";
 
 import * as cheerio from "cheerio";
 
 import { gmail_v1 } from "googleapis";
 
 import { getGmailInstance } from "./auth";
+
+import {
+  saveState,
+  emailAlreadyProcessed,
+  setEmailAsProcessed,
+  finishProcess
+} from "./state";
 
 // import emailData from "../storage/email";
 
@@ -15,13 +21,23 @@ interface news {
   link?: string;
 }
 
-async function mailRobot(content: any) {
+async function mailRobot() {
   const Gmail = getGmailInstance();
+
+  const content: any = {
+    source: {},
+    news: [],
+    advertising: [],
+  };
 
   const newEmailId = await searchForNewEmails(Gmail);
   const emailData = await fetchEmailContent(newEmailId, content);
 
   breakEmailIntoNews(emailData, content);
+
+  saveState(content);
+
+  finishProcess(content.source.id)
 
   return;
 
@@ -56,15 +72,13 @@ async function mailRobot(content: any) {
 
     async function getUnprocessedEmail(emailList: Object): Promise<string> {
       return new Promise(async (resolve, reject) => {
-        const processedEmailIds = [""];
-
         for (const email of Object.values(emailList).reverse()) {
-          if (processedEmailIds.includes(email.id)) continue;
+          if (emailAlreadyProcessed(email.id)) continue;
           console.log(`> [mail-robot] - Found a new email with id ${email.id}`);
           // Adicionar email a lista de emails já processados.
-          processedEmailIds.push(email.id);
+          setEmailAsProcessed(email.id);
           resolve(email.id);
-          break
+          break;
         }
 
         reject({
@@ -78,6 +92,7 @@ async function mailRobot(content: any) {
   async function fetchEmailContent(id: string, content: any) {
     try {
       console.log(content.source);
+      if(!content.source) content.source = {}
       content.source.id = id;
       const fullEmail = await getMailById(id);
 
@@ -106,7 +121,10 @@ async function mailRobot(content: any) {
       });
     }
 
-    async function decodeEmailAndReturnHTML(email: any, content: any): Promise<string> {
+    async function decodeEmailAndReturnHTML(
+      email: any,
+      content: any
+    ): Promise<string> {
       return new Promise(async (resolve, reject) => {
         const headers = email.payload.headers;
 
@@ -114,12 +132,13 @@ async function mailRobot(content: any) {
         content.source.data = Date.value || "";
 
         const From = await headers.find((item: any) => item.name === "From");
-        
 
         content.source.origin = From.value.match(/(?<=<)(.*?)(?=>)/)[0] || "";
         content.source.name = From.value.match(/(?<=")(.*?)(?=")/)[0] || "";
 
-        const Subject = await headers.find((item: any) => item.name === "Subject");
+        const Subject = await headers.find(
+          (item: any) => item.name === "Subject"
+        );
 
         content.source.title = Subject.value || "";
 
@@ -147,8 +166,7 @@ async function mailRobot(content: any) {
       text(Obj: any, news: news) {
         const text = $(Obj)
           .text()
-          // .replace(/(\n+\t+)|(^\s|\s$)/g, "");
-          .replace(/\r?\n|\r|^\s+|\s+$/g, '')
+          .replace(/\r?\n|\r|^\s+|\s+$/g, "");
         if (/\S/.test(text)) news.body = text.replace(/^:/, "");
       },
     };

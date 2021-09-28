@@ -1,5 +1,8 @@
-src/storage/
-src/credentials/
+src/storage/*.json
+src/storage/*.html
+src/storage/*.ts
+src/storage/backup
+src/credentials/*.json
 dist/
 # Logs
 logs
