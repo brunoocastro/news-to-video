@@ -18,7 +18,7 @@ async function start() {
 
   await robots.auth();
   await robots.mail();
-  robots.text();
+  await robots.text();
 
   return;
 }
