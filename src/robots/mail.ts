@@ -10,10 +10,8 @@ import {
   saveState,
   emailAlreadyProcessed,
   setEmailAsProcessed,
-  finishProcess
 } from "./state";
 
-// import emailData from "../storage/email";
 
 interface news {
   title: string;
@@ -36,8 +34,6 @@ async function mailRobot() {
   breakEmailIntoNews(emailData, content);
 
   saveState(content);
-
-  finishProcess(content.source.id)
 
   return;
 
