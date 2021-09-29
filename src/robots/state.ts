@@ -26,9 +26,9 @@ function loadState() {
   return stateJSON;
 }
 
-function finishProcess(id: string) {
+function finishProcess() {
   const actualState = loadState()
-  fs.writeFileSync(backupPath + `/${id}.json`, JSON.stringify(actualState));
+  fs.writeFileSync(backupPath + `/${actualState.source?.id}.json`, JSON.stringify(actualState));
   return  
 }
 
