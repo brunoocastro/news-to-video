@@ -1,12 +1,13 @@
 import express, { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 
-import { gmail_v1, google, youtube_v3 } from "googleapis";
+import { customsearch_v1, gmail_v1, google, youtube_v3 } from "googleapis";
 const OAuth2 = google.auth.OAuth2;
 
 let OAuthClient: OAuth2Client;
 let GmailInstance: gmail_v1.Gmail;
 let YoutubeInstance: youtube_v3.Youtube;
+let CustomSearchInstance: customsearch_v1.Customsearch;
 
 let tokens;
 
@@ -125,4 +126,11 @@ function getYoutubeInstance() {
   return YoutubeInstance;
 }
 
-export { startOAuthAuthentication, getGmailInstance, getYoutubeInstance };
+function getCustomSearchInstance() {
+  if (CustomSearchInstance === null || CustomSearchInstance === undefined)
+    CustomSearchInstance = google.customsearch({ version: "v1", auth: OAuthClient });
+
+  return CustomSearchInstance;
+}
+
+export { startOAuthAuthentication, getGmailInstance, getYoutubeInstance, getCustomSearchInstance };

@@ -18,9 +18,9 @@ interface content {
 async function start() {
   console.log("> [orchestrator] Initializing system");
 
-  // await robots.auth();
-  // await robots.mail();
-  // await robots.text();
+  await robots.auth();
+  await robots.mail();
+  await robots.text();
   await robots.image();
 
   return;
