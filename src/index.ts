@@ -23,6 +23,8 @@ async function start() {
   await robots.text();
   await robots.image();
 
+  console.log("Process finished!")
+
   return;
 }
 

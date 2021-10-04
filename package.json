@@ -32,6 +32,7 @@
     "express": "^4.17.1",
     "googleapis": "^87.0.0",
     "ibm-watson": "^6.2.1",
+    "image-downloader": "^4.0.3",
     "sbd": "^1.0.19"
   }
 }

@@ -21,8 +21,6 @@ async function textRobot() {
 
   await fetchKeywordsOfAllSentences();
 
-  console.log("Last State: \n", state);
-
   saveState(state);
 
   function breakContentIntoSentences() {
@@ -35,23 +33,6 @@ async function textRobot() {
 
       sentences.forEach((sentence, sentenceId) => {
         state.news[index].sentences.push({
-          id: sentenceId + 1,
-          text: sentence,
-          keywords: [],
-          images: [],
-        });
-      });
-    }
-
-    console.log(`> [text-robot] - Breaking advertising into sentences`);
-
-    for (const index in state.advertising) {
-      const advertising = state.advertising[index];
-      const sentences = sbd.sentences(advertising.body);
-      sentences.unshift(advertising.title);
-
-      sentences.forEach((sentence, sentenceId) => {
-        state.advertising[index].sentences.push({
           id: sentenceId + 1,
           text: sentence,
           keywords: [],
@@ -90,21 +71,6 @@ async function textRobot() {
       for (const sentenceId in sentences) {
         const sentence = sentences[sentenceId]
         state.news[index].sentences[sentenceId].keywords = await fetchWatsonAndReturnKeywords(
-          sentence.text
-        );
-      }
-    }
-
-    console.log(
-      `> [text-robot] - Fetching keywords to all advertising sentences`
-    );
-
-    for (const index in state.advertising) {
-      const sentences = state.advertising[index].sentences;
-
-      for (const sentenceId in sentences) {
-        const sentence = sentences[sentenceId]
-        state.advertising[index].sentences[sentenceId].keywords = await fetchWatsonAndReturnKeywords(
           sentence.text
         );
       }

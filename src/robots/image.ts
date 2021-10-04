@@ -1,3 +1,6 @@
+import imgDownloader from "image-downloader";
+import path from "path";
+
 import { getCustomSearchInstance } from "./auth";
 import { loadState, saveState } from "./state";
 
@@ -5,11 +8,17 @@ async function imageRobot() {
   const state = loadState();
   const customSearch = getCustomSearchInstance();
 
-  await fetchImagesOfAllSentences();
+  await fetchImagesOfAllSentences(customSearch);
 
-  saveState(state)
+  await downloadAllImages(state);
 
-  async function fetchImagesOfAllSentences() {
+  console.log("Last State: \n", state);
+
+  saveState(state);
+
+  return;
+
+  async function fetchImagesOfAllSentences(customSearch: any) {
     console.log(`> [image-robot] - Fetching images to all news sentences`);
 
     for (const index in state.news) {
@@ -26,32 +35,12 @@ async function imageRobot() {
 
         state.news[index].sentences[sentenceId].imgSearchText = query;
         state.news[index].sentences[sentenceId].images =
-          await fetchGoogleAndReturnImageLinks(query);
-      }
-    }
-
-    console.log(
-      `> [image-robot] - Fetching images to all advertising sentences`
-    );
-
-    for (const index in state.advertising) {
-      const sentences = state.advertising[index].sentences;
-
-      for (const sentenceId in sentences) {
-        const sentence = sentences[sentenceId];
-        let query = "";
-        if (sentence.keywords.length >= 2)
-          query = `${sentence.keywords[0]} ${sentence.keywords[1]}`;
-        else if (sentence.keywords.length === 1)
-          query = `${sentence.keywords[0]}`;
-        else query = sentence.text;
-
-        state.advertising[index].sentences[sentenceId].images =
-          await fetchGoogleAndReturnImageLinks(query);
+          await fetchGoogleAndReturnImageLinks(customSearch, query);
       }
     }
 
     async function fetchGoogleAndReturnImageLinks(
+      customSearch: any,
       query: string,
       full: boolean = false
     ) {
@@ -67,13 +56,63 @@ async function imageRobot() {
           imgSize: imgSizeStyle,
         });
 
-        const imagesUrl = response.data.items?.map((item) => item.link);
+        const imagesUrl = response.data.items?.map((item: any) => item.link);
 
         return imagesUrl;
       } catch (error) {
         console.error(error);
         return [];
       }
+    }
+  }
+
+  async function downloadAllImages(state: any) {
+    state.downloadedImages = [];
+
+    console.log(`> [image-robot] - Download images to all news sentences`);
+
+    for (const newsIndex in state.news) {
+      const sentences = state.news[newsIndex].sentences;
+
+      for (const sentenceIndex in sentences) {
+        const images = sentences[sentenceIndex].images;
+
+        for (const imgURLIndex in images) {
+          const imageURL = images[imgURLIndex];
+
+          try {
+            if (state.downloadedImages.includes(imageURL))
+              throw new Error("Essa imagem já foi baixada!");
+
+            await downloadAndSaveImage(imageURL, newsIndex, sentenceIndex);
+            state.downloadedImages.push(imageURL);
+            console.log(
+              `> [${sentenceIndex}][${imgURLIndex}] Imagem baixada com sucesso! Link: ${imageURL}`
+            );
+            break;
+          } catch (error) {
+            console.log(
+              `> [${sentenceIndex}][${imgURLIndex}] Erro ao baixar ${imageURL}. Erro: ${error}`
+            );
+          }
+        }
+      }
+    }
+
+    async function downloadAndSaveImage(
+      imageURL: string,
+      newsIndex: string,
+      sentenceIndex: string
+    ) {
+      const filename = `/${newsIndex}-${sentenceIndex}-original.png`;
+      const filepath = path.resolve("src", "storage", "images");
+
+      const fileImageDest = filepath + filename;
+
+      return imgDownloader.image({
+        url: imageURL,
+        dest: fileImageDest,
+      });
     }
   }
 }

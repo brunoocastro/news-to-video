@@ -71,7 +71,6 @@ async function mailRobot() {
         for (const email of Object.values(emailList).reverse()) {
           if (emailAlreadyProcessed(email.id)) continue;
           console.log(`> [mail-robot] - Found a new email with id ${email.id}`);
-          // Adicionar email a lista de emails já processados.
           setEmailAsProcessed(email.id);
           resolve(email.id);
           break;
