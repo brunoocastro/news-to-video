@@ -1,12 +1,14 @@
-import mailRobot from "./robots/mail";
-import { startOAuthAuthentication } from "./robots/auth";
-import textRobot from "./robots/text";
 require("dotenv").config();
+import { startOAuthAuthentication } from "./robots/auth";
+import mailRobot from "./robots/mail";
+import textRobot from "./robots/text";
+import imageRobot from "./robots/image";
 
 const robots = {
   auth: startOAuthAuthentication,
   mail: mailRobot,
   text: textRobot,
+  image: imageRobot
 };
 
 interface content {
@@ -19,6 +21,9 @@ async function start() {
   await robots.auth();
   await robots.mail();
   await robots.text();
+  await robots.image();
+
+  console.log("Process finished!")
 
   return;
 }

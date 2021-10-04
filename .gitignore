@@ -1,9 +1,12 @@
 src/storage/*.json
 src/storage/*.html
 src/storage/*.ts
-src/storage/backup
+src/storage/backup/*
+src/storage/images/*
 src/credentials/*.json
 dist/
+
+
 # Logs
 logs
 *.log
