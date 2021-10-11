@@ -3,12 +3,14 @@ import { startOAuthAuthentication } from "./robots/auth";
 import mailRobot from "./robots/mail";
 import textRobot from "./robots/text";
 import imageRobot from "./robots/image";
+import audioRobot from "./robots/audio";
 
 const robots = {
   auth: startOAuthAuthentication,
   mail: mailRobot,
   text: textRobot,
-  image: imageRobot
+  image: imageRobot,
+  audio: audioRobot,
 };
 
 interface content {
@@ -22,8 +24,9 @@ async function start() {
   await robots.mail();
   await robots.text();
   await robots.image();
+  await robots.audio();
 
-  console.log("Process finished!")
+  console.log("Process finished!");
 
   return;
 }

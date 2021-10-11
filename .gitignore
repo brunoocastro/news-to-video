@@ -3,6 +3,7 @@ src/storage/*.html
 src/storage/*.ts
 src/storage/backup/*
 src/storage/images/*
+src/storage/audio/*
 src/credentials/*.json
 dist/
 
